@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import getToken from '../services';
 
 const INITIAL_STATE = {
   name: '',
@@ -26,8 +27,10 @@ class Login extends React.Component {
     }, this.validateForm);
   };
 
-  entrar = () => {
+  entrar = async () => {
     const { history } = this.props;
+    const response = await getToken();
+    localStorage.setItem('token', response.token);
     history.push('/play');
   };
 
