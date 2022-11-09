@@ -1,17 +1,15 @@
 import React from 'react';
 
-class Configuracao extends React.Component {
+class Configuracoes extends React.Component {
   render() {
     return (
-      <p
-        data-testid="settings-title
-      "
+      <h1
+        data-testid="settings-title"
       >
         Configurações
-
-      </p>
+      </h1>
     );
   }
 }
 
-export default Configuracao;
+export default Configuracoes;
