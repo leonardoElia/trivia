@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+ grupo2-req4
+
 import getToken from '../services';
+ grupo2-release
 
 const INITIAL_STATE = {
   name: '',
@@ -27,6 +30,13 @@ class Login extends React.Component {
     }, this.validateForm);
   };
 
+ grupo2-req4
+  entrar = () => {
+    const { history } = this.props;
+    history.push('/play');
+  };
+
+
   entrar = async () => {
     const { history } = this.props;
     const response = await getToken();
@@ -39,6 +49,7 @@ class Login extends React.Component {
     history.push('/configuracoes');
   };
 
+ grupo2-release
   render() {
     const { buttonPlay, name, email } = this.state;
     return (
@@ -78,6 +89,8 @@ class Login extends React.Component {
           Play
 
         </button>
+ grupo2-req4
+
         <button
           type="button"
           data-testid="btn-settings"
@@ -85,6 +98,7 @@ class Login extends React.Component {
         >
           Configurações
         </button>
+ grupo2-release
 
       </>
 
