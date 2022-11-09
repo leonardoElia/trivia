@@ -73,7 +73,6 @@ class Login extends React.Component {
           Play
 
         </button>
-
       </>
 
     );
