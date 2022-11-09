@@ -3,7 +3,16 @@ import React from 'react';
 class Play extends React.Component {
   render() {
     return (
-      <h1>Play</h1>
+      <div>
+
+        <h1>Play</h1>
+        <button
+          type="button"
+          data-testid="btn-settings"
+        >
+          Configuração
+        </button>
+      </div>
     );
   }
 }
