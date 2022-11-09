@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 import App from '../App';
@@ -30,7 +30,7 @@ describe('Analisando a página de Login', () => {
 
   test(
     'Verificar se existe um botão clicavel na tela e se redireciona para a página /play',
-    () => {
+    async () => {
       const { history } = renderWithRouterAndRedux(<App />);
 
       const buttonPlay = screen.getByRole('button', { name: /Play/i });
@@ -44,8 +44,10 @@ describe('Analisando a página de Login', () => {
       expect(buttonPlay).toBeInTheDocument();
       userEvent.click(buttonPlay);
 
-      const { pathname } = history.location;
-      expect(pathname).toBe('/play');
+      await waitFor(() => {
+        const { pathname } = history.location;
+        expect(pathname).toBe('/play');
+        }); 
     },
   );
 
