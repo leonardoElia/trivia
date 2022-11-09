@@ -1,7 +1,7 @@
 import React from 'react';
-import './App.css';
 import { Route, Switch } from 'react-router-dom';
-import Login from './Pages/login';
+import './App.css';
+import Login from './Pages/Login';
 import Play from './Pages/play';
 
 export default function App() {
