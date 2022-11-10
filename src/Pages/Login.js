@@ -38,7 +38,9 @@ class Login extends React.Component {
     const emailGravatar = md5(email).toString();
     dispatch((actionNome(name)));
     dispatch(actionEmail(emailGravatar));
-    history.push('/play');
+    if (response.token) {
+      history.push('/play');
+    }
   };
 
   configButton = () => {

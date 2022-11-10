@@ -47,6 +47,7 @@ describe('Analisando a página de Login', () => {
       await waitFor(() => {
         const { pathname } = history.location;
         expect(pathname).toBe('/play');
+        expect(localStorage.getItem('token')).toBeDefined();
         }); 
     },
   );
