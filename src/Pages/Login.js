@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
 import { actionEmail, actionNome } from '../redux/actions/indexAction';
+import getToken from '../services';
 
 const INITIAL_STATE = {
   name: '',
@@ -29,13 +30,21 @@ class Login extends React.Component {
     }, this.validateForm);
   };
 
-  entrar = () => {
+
+  entrar = async () => {
     const { history, dispatch } = this.props;
     const { email, name } = this.state;
+    const response = await getToken();
+    localStorage.setItem('token', response.token);
     const emailGravatar = md5(email).toString();
     dispatch((actionNome(name)));
     dispatch(actionEmail(emailGravatar));
     history.push('/play');
+  };
+
+  configButton = () => {
+    const { history } = this.props;
+    history.push('/configuracoes');
   };
 
   render() {
@@ -78,6 +87,14 @@ class Login extends React.Component {
 
         </button>
 
+        <button
+          type="button"
+          data-testid="btn-settings"
+          onClick={ this.configButton }
+        >
+          Configurações
+        </button>
+
       </>
 
     );
@@ -88,7 +105,12 @@ Login.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+
   dispatch: PropTypes.func.isRequired,
 };
 
 export default connect()(Login);
+
+
+export default Login;
+
