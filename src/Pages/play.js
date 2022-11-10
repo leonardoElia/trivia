@@ -24,9 +24,16 @@ class Play extends React.Component {
 
   }
 
-  // randomAnswer = () => {
-  //   const { questions } = this.props;
-  // };
+  randomAnswer = () => {
+    const { questions: { results }, randomNumber } = this.props;
+    const incorrectAnswers = results[randomNumber].incorrect_answers;
+    const correctAnswer = results[randomNumber].correct_answer;
+    const arrayOfAnswer = [...incorrectAnswers, correctAnswer];
+    if (arrayOfAnswer.length === 2) {
+      return [arrayOfAnswer[1], arrayOfAnswer[0]];
+    }
+    return [arrayOfAnswer[3], arrayOfAnswer[2], arrayOfAnswer[0], arrayOfAnswer[1]];
+  };
 
   render() {
     const { questions, randomNumber } = this.props;
@@ -41,19 +48,16 @@ class Play extends React.Component {
                   key={ question.question }
                 >
                   <p data-testid="question-category">{question.category}</p>
+                  <br />
                   <p data-testid="question-text">{question.question}</p>
                   <div data-testid="answer-options ">
-                    <button
-                      data-testid="correct-answer"
-                      type="button"
-                    >
-                      {question.correct_answer}
-                    </button>
-                    {question.incorrect_answers.map((answer, index) => (
+                    {this.randomAnswer().map((answer, index) => (
                       <button
-                        data-testid={ `wrong-answer-${index}` }
+                        data-testid={ answer === question.correct_answer
+                          ? 'correct-answer'
+                          : `wrong-answer-${index}` }
                         type="button"
-                        key={ index }
+                        key={ answer }
                       >
                         {answer}
                       </button>
