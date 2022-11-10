@@ -11,3 +11,8 @@ export const actionNome = (nome) => ({
 export const actionScore = () => ({
 
 });
+
+export const saveQuestions = (data) => ({
+  type: 'SAVE_QUESTIONS',
+  data,
+});
