@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import md5 from 'crypto-js/md5';
+import { actionEmail, actionNome } from '../redux/actions/indexAction';
 
 const INITIAL_STATE = {
   name: '',
@@ -27,7 +30,11 @@ class Login extends React.Component {
   };
 
   entrar = () => {
-    const { history } = this.props;
+    const { history, dispatch } = this.props;
+    const { email, name } = this.state;
+    const emailGravatar = md5(email).toString();
+    dispatch((actionNome(name)));
+    dispatch(actionEmail(emailGravatar));
     history.push('/play');
   };
 
@@ -81,6 +88,7 @@ Login.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
-export default Login;
+export default connect()(Login);
