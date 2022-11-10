@@ -30,7 +30,6 @@ class Login extends React.Component {
     }, this.validateForm);
   };
 
-
   entrar = async () => {
     const { history, dispatch } = this.props;
     const { email, name } = this.state;
@@ -110,7 +109,3 @@ Login.propTypes = {
 };
 
 export default connect()(Login);
-
-
-export default Login;
-
