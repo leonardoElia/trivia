@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 import Header from '../componentes/Header';
 import { saveQuestions } from '../redux/actions/indexAction';
 import { getQuestions } from '../services';
+import './play.css';
 
 const THREE = 3;
 
 class Play extends React.Component {
   state = {
+    question: false,
     random: 0,
   };
 
@@ -42,6 +44,14 @@ class Play extends React.Component {
     } return arrayOfAnswer;
   };
 
+  handleColor = (color) => {
+    const { question } = this.state;
+    if (question) {
+      return color === 'correct_answer' ? 'correct' : 'wrong';
+    }
+    return '';
+  };
+
   render() {
     const { questions } = this.props;
     return (
@@ -60,6 +70,7 @@ class Play extends React.Component {
                   <div data-testid="answer-options">
                     {this.randomAnswer().map((answer, index) => (
                       <button
+                        className={ this.handleColor(answer) }
                         data-testid={ answer === question.correct_answer
                           ? 'correct-answer'
                           : `wrong-answer-${index}` }
