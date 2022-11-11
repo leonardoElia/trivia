@@ -1,6 +1,4 @@
 import React from 'react';
-
-const ONE_SECOND = 1000;
 // const thirty = 30;
 
 class Timer extends React.Component {
@@ -22,13 +20,12 @@ class Timer extends React.Component {
   // };
 
   componentDidMount() {
-    // setInterval(() => {
-    //   this.setState((prev) => ({
-    //     timer: prev.timer === 0 ? thirty
-    //       : prev.timer - 1,
-    //   }));
-    // }, ONE_SECOND);
-    this.handleTime();
+    const ONE_SECOND = 1000;
+    this.intervalID = setInterval(() => {
+      this.setState((prev) => ({
+        timer: prev.timer - 1,
+      }));
+    }, ONE_SECOND);
   }
 
   // shouldComponentUpdate(_nextProps, nextState) {
@@ -36,19 +33,24 @@ class Timer extends React.Component {
   //   return (timer !== 0);
   // }
 
-  componentWillUnmount(props, state) {
-    if (state.timer === 0) {
-      this.handleTime();
+  componentDidUpdate(_prevProps, prevState) {
+    if (prevState.timer === 1) {
+      clearInterval(this.intervalID);
     }
   }
 
-  handleTime = () => {
-    setInterval(() => {
-      this.setState((prev) => ({
-        timer: prev.timer - 1,
-      }));
-    }, ONE_SECOND);
-  };
+  componentWillUnmount() {
+    clearInterval(this.intervalID);
+    console.log('Timer Desmontado');
+  }
+
+  // handleTime = () => {
+  //   setInterval(() => {
+  //     this.setState((prev) => ({
+  //       timer: prev.timer - 1,
+  //     }));
+  //   }, ONE_SECOND);
+  // };
 
   render() {
     const { timer } = this.state;
