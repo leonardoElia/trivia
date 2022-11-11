@@ -8,12 +8,14 @@ import { getQuestions } from '../services';
 import './play.css';
 
 const THREE = 3;
+const ONE_SECOND = 1000;
 
 class Play extends React.Component {
   state = {
     answerColor: false,
     random: 0,
     timer: 30,
+    buttonDisabled: false,
   };
 
   async componentDidMount() {
@@ -29,11 +31,30 @@ class Play extends React.Component {
     this.setState({
       random: Math.floor(Math.random() * 100),
     });
+    this.timer();
   }
 
-  componentDidUpdate() {
-
+  componentDidUpdate(_prevProps, prevState) {
+    if (prevState.timer === 1) {
+      clearInterval(this.intervalID);
+      this.setState({
+        buttonDisabled: true,
+      });
+    }
   }
+
+  componentWillUnmount() {
+    clearInterval(this.intervalID);
+    console.log('Timer Desmontado');
+  }
+
+  timer = () => {
+    this.intervalID = setInterval(() => {
+      this.setState((prev) => ({
+        timer: prev.timer > 0 ? prev.timer - 1 : 0,
+      }));
+    }, ONE_SECOND);
+  };
 
   randomAnswer = () => {
     const { random } = this.state;
@@ -56,16 +77,13 @@ class Play extends React.Component {
   };
 
   handleClick = () => {
-    // const { target: { value } } = event;
-    // const { answerColor } = this.state;
-    // const { questions: { results } } = this.props;
     this.setState({
       answerColor: true,
     });
   };
 
   render() {
-    const { timer } = this.state;
+    const { timer, buttonDisabled } = this.state;
     const { questions } = this.props;
     return (
       <div>
@@ -92,6 +110,7 @@ class Play extends React.Component {
                         key={ answer }
                         onClick={ this.handleClick }
                         value={ answer }
+                        disabled={ buttonDisabled }
                       >
                         {answer}
                       </button>
@@ -110,14 +129,12 @@ Play.propTypes = {
     push: PropTypes.func,
   }).isRequired,
   questions: PropTypes.objectOf().isRequired,
-  // randomNumber: PropTypes.number.isRequired,
 
   dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (store) => ({
   questions: store.game.questions,
-  // randomNumber: store.game.number,
 
 });
 export default connect(mapStateToProps)(Play);
