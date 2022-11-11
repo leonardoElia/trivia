@@ -4,10 +4,15 @@ import { connect } from 'react-redux';
 import Header from '../componentes/Header';
 import { saveQuestions } from '../redux/actions/indexAction';
 import { getQuestions } from '../services';
+import './play.css';
 
 const THREE = 3;
 
 class Play extends React.Component {
+  state = {
+    question: false,
+  };
+
   async componentDidMount() {
     const token = localStorage.getItem('token');
     const questions = await getQuestions(token);
@@ -35,6 +40,14 @@ class Play extends React.Component {
     return [arrayOfAnswer[3], arrayOfAnswer[2], arrayOfAnswer[0], arrayOfAnswer[1]];
   };
 
+  handleColor = (color) => {
+    const { question } = this.state;
+    if (question) {
+      return color === 'correct_answer' ? 'correct' : 'wrong';
+    }
+    return '';
+  };
+
   render() {
     const { questions, randomNumber } = this.props;
     return (
@@ -53,6 +66,7 @@ class Play extends React.Component {
                   <div data-testid="answer-options ">
                     {this.randomAnswer().map((answer, index) => (
                       <button
+                        className={ this.handleColor(answer) }
                         data-testid={ answer === question.correct_answer
                           ? 'correct-answer'
                           : `wrong-answer-${index}` }
