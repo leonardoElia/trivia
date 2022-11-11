@@ -11,6 +11,7 @@ const THREE = 3;
 class Play extends React.Component {
   state = {
     question: false,
+    random: 0,
   };
 
   async componentDidMount() {
@@ -23,6 +24,9 @@ class Play extends React.Component {
     }
     const { dispatch } = this.props;
     await dispatch(saveQuestions(questions));
+    this.setState({
+      random: Math.floor(Math.random() * 100),
+    });
   }
 
   componentDidUpdate() {
@@ -30,14 +34,14 @@ class Play extends React.Component {
   }
 
   randomAnswer = () => {
-    const { questions: { results }, randomNumber } = this.props;
-    const incorrectAnswers = results[randomNumber].incorrect_answers;
-    const correctAnswer = results[randomNumber].correct_answer;
+    const { random } = this.state;
+    const { questions: { results } } = this.props;
+    const incorrectAnswers = results[0].incorrect_answers;
+    const correctAnswer = results[0].correct_answer;
     const arrayOfAnswer = [...incorrectAnswers, correctAnswer];
-    if (arrayOfAnswer.length === 2) {
+    if (arrayOfAnswer.length === 2 && random % 2 === 0) {
       return [arrayOfAnswer[1], arrayOfAnswer[0]];
-    }
-    return [arrayOfAnswer[3], arrayOfAnswer[2], arrayOfAnswer[0], arrayOfAnswer[1]];
+    } return arrayOfAnswer;
   };
 
   handleColor = (color) => {
@@ -49,13 +53,13 @@ class Play extends React.Component {
   };
 
   render() {
-    const { questions, randomNumber } = this.props;
+    const { questions } = this.props;
     return (
       <div>
         <Header />
         {
           questions.length !== 0
-            ? questions.results.filter((_e, index) => index === randomNumber)
+            ? questions.results.filter((e, i) => i === 0)
               .map((question) => (
                 <div
                   key={ question.question }
@@ -63,7 +67,7 @@ class Play extends React.Component {
                   <p data-testid="question-category">{question.category}</p>
                   <br />
                   <p data-testid="question-text">{question.question}</p>
-                  <div data-testid="answer-options ">
+                  <div data-testid="answer-options">
                     {this.randomAnswer().map((answer, index) => (
                       <button
                         className={ this.handleColor(answer) }
@@ -80,7 +84,6 @@ class Play extends React.Component {
                 </div>
               )) : null
         }
-
       </div>
     );
   }
@@ -91,14 +94,14 @@ Play.propTypes = {
     push: PropTypes.func,
   }).isRequired,
   questions: PropTypes.objectOf().isRequired,
-  randomNumber: PropTypes.number.isRequired,
+  // randomNumber: PropTypes.number.isRequired,
 
   dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (store) => ({
   questions: store.game.questions,
-  randomNumber: store.game.number,
+  // randomNumber: store.game.number,
 
 });
 export default connect(mapStateToProps)(Play);
