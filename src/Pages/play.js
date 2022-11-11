@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../componentes/Header';
+import Timer from '../componentes/Timer';
 import { saveQuestions } from '../redux/actions/indexAction';
 import { getQuestions } from '../services';
 import './play.css';
@@ -10,8 +11,9 @@ const THREE = 3;
 
 class Play extends React.Component {
   state = {
-    question: false,
+    answerColor: false,
     random: 0,
+    timer: 30,
   };
 
   async componentDidMount() {
@@ -44,19 +46,31 @@ class Play extends React.Component {
     } return arrayOfAnswer;
   };
 
-  handleColor = (color) => {
-    const { question } = this.state;
-    if (question) {
-      return color === 'correct_answer' ? 'correct' : 'wrong';
+  handleColor = (answer) => {
+    const { answerColor } = this.state;
+    const { questions } = this.props;
+    if (answerColor) {
+      return answer === questions.results[0].correct_answer ? 'correct' : 'wrong';
     }
     return '';
   };
 
+  handleClick = () => {
+    // const { target: { value } } = event;
+    // const { answerColor } = this.state;
+    // const { questions: { results } } = this.props;
+    this.setState({
+      answerColor: true,
+    });
+  };
+
   render() {
+    const { timer } = this.state;
     const { questions } = this.props;
     return (
       <div>
         <Header />
+        <Timer timer={ timer } />
         {
           questions.length !== 0
             ? questions.results.filter((e, i) => i === 0)
@@ -76,6 +90,8 @@ class Play extends React.Component {
                           : `wrong-answer-${index}` }
                         type="button"
                         key={ answer }
+                        onClick={ this.handleClick }
+                        value={ answer }
                       >
                         {answer}
                       </button>
