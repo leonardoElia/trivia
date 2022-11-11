@@ -40,14 +40,18 @@ describe('Analisando a página de Login', () => {
       userEvent.type(inputName, 'Pedro');
       const inputEmail = screen.getByText(/email/i);
       userEvent.type(inputEmail, email);
-
+      expect(buttonPlay).toBeEnabled();
       expect(buttonPlay).toBeInTheDocument();
+      const { pathname } = history.location;
+      expect(pathname).toBe('/');
       userEvent.click(buttonPlay);
 
       await waitFor(() => {
         const { pathname } = history.location;
         expect(pathname).toBe('/play');
-        expect(localStorage.getItem('token')).toBeDefined();
+        const token = localStorage.getItem('token')
+        expect(token).toBeDefined();
+        expect(typeof token).toBe('string');
         }); 
     },
   );
