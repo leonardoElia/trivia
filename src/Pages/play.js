@@ -16,6 +16,7 @@ class Play extends React.Component {
     random: 0,
     timer: 30,
     buttonDisabled: false,
+    indexQ: 0,
   };
 
   async componentDidMount() {
@@ -82,8 +83,23 @@ class Play extends React.Component {
     });
   };
 
+  handleClickNext = () => {
+    const { index } = this.state;
+    const { history } = this.props;
+    const four = 4;
+    if (index === four) {
+      history.push('/feedback');
+    }
+    this.setState((prev) => ({
+      ...prev,
+      indexQ: prev.indexQ + 1,
+      answerColor: false,
+      timer: 30,
+    }));
+  };
+
   render() {
-    const { timer, buttonDisabled } = this.state;
+    const { timer, buttonDisabled, answerColor } = this.state;
     const { questions } = this.props;
     return (
       <div>
@@ -119,6 +135,15 @@ class Play extends React.Component {
                 </div>
               )) : null
         }
+        { answerColor && (
+          <button
+            data-testid="btn-next"
+            type="button"
+            onClick={ this.handleClickNext }
+          >
+            Next
+          </button>
+        )}
       </div>
     );
   }
