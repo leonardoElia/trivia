@@ -11,6 +11,8 @@ const player = (state = initialState, action) => {
     return { ...state, gravatarEmail: action.email };
   case 'MUDAR_NOME':
     return { ...state, name: action.nome };
+  case 'ADICIONAR_SCORE':
+    return { ...state, score: action.score };
   default:
     return state;
   }

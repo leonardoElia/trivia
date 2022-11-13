@@ -3,12 +3,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../componentes/Header';
 import Timer from '../componentes/Timer';
-import { saveQuestions } from '../redux/actions/indexAction';
+import { actionScore, saveQuestions } from '../redux/actions/indexAction';
 import { getQuestions } from '../services';
 import './play.css';
 
 const THREE = 3;
 const ONE_SECOND = 1000;
+const soma10 = 10;
+const hard = 3;
+const medium = 2;
+const easy = 1;
 
 class Play extends React.Component {
   state = {
@@ -16,6 +20,7 @@ class Play extends React.Component {
     random: 0,
     timer: 30,
     buttonDisabled: false,
+    indexPergunta: 0,
     indexQ: 0,
   };
 
@@ -77,21 +82,40 @@ class Play extends React.Component {
     return '';
   };
 
-  handleClick = () => {
+  handleClick = ({ target }) => {
     this.setState({
       answerColor: true,
     });
+    const { results, dispatch } = this.props;
+
+    const { indexPergunta } = this.state;
+    const { value } = target;
+    if (results[indexPergunta].correct_answer === value) {
+      const { timer } = this.state;
+      const { difficulty } = results[indexPergunta];
+
+      let pontuacao = 0;
+      if (difficulty === 'hard') {
+        pontuacao = soma10 + (hard * timer);
+        dispatch(actionScore(pontuacao));
+      } else if (difficulty === 'medium') {
+        pontuacao = soma10 + (medium * timer);
+        dispatch(actionScore(pontuacao));
+      } else {
+        pontuacao = soma10 + (easy * timer);
+        dispatch(actionScore(pontuacao));
+      }
+    }
   };
 
   handleClickNext = () => {
-    const { index } = this.state;
+    const { indexQ } = this.state;
     const { history } = this.props;
     const four = 4;
-    if (index === four) {
+    if (indexQ === four) {
       history.push('/feedback');
     }
     this.setState((prev) => ({
-      ...prev,
       indexQ: prev.indexQ + 1,
       answerColor: false,
       timer: 30,
@@ -99,7 +123,7 @@ class Play extends React.Component {
   };
 
   render() {
-    const { timer, buttonDisabled, answerColor } = this.state;
+    const { timer, buttonDisabled, answerColor, indexQ } = this.state;
     const { questions } = this.props;
     return (
       <div>
@@ -107,7 +131,7 @@ class Play extends React.Component {
         <Timer timer={ timer } />
         {
           questions.length !== 0
-            ? questions.results.filter((e, i) => i === 0)
+            ? questions.results.filter((e, i) => i === indexQ)
               .map((question) => (
                 <div
                   key={ question.question }
@@ -154,12 +178,12 @@ Play.propTypes = {
     push: PropTypes.func,
   }).isRequired,
   questions: PropTypes.objectOf().isRequired,
-
+  results: PropTypes.arrayOf().isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (store) => ({
   questions: store.game.questions,
-
+  results: store.game.questions.results,
 });
 export default connect(mapStateToProps)(Play);

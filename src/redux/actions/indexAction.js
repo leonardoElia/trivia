@@ -8,8 +8,9 @@ export const actionNome = (nome) => ({
   nome,
 });
 
-export const actionScore = () => ({
-
+export const actionScore = (score) => ({
+  type: 'ADICIONAR_SCORE',
+  score,
 });
 
 export const saveQuestions = (data) => ({
