@@ -47,12 +47,11 @@ describe('Analisando a página de Login', () => {
       userEvent.click(buttonPlay);
 
       await waitFor(() => {
-        const { pathname } = history.location;
         expect(pathname).toBe('/play');
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('token');
         expect(token).toBeDefined();
         expect(typeof token).toBe('string');
-        }); 
+      }, { timeout: 2000 });
     },
   );
 
