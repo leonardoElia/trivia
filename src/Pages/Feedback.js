@@ -1,11 +1,16 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import Header from '../componentes/Header';
 
 const acertos = 3;
 
 class Feedback extends React.Component {
+  componentDidMount() {
+    const { player } = this.props;
+    localStorage.setItem('ranking', JSON.stringify(player));
+  }
+
   sendToLogin = () => {
     const { history } = this.props;
     history.push('/');
@@ -48,11 +53,18 @@ class Feedback extends React.Component {
 const mapStateToProps = (store) => ({
   assertions: store.player.assertions,
   score: store.player.score,
+  player: store.player,
 });
 
 Feedback.propTypes = {
   assertions: PropTypes.number.isRequired,
   score: PropTypes.number.isRequired,
+  player: PropTypes.shape({
+    name: PropTypes.string,
+    assertions: PropTypes.number,
+    score: PropTypes.number,
+    gravatarEmail: PropTypes.string,
+  }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
