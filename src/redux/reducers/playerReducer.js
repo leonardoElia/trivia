@@ -13,6 +13,8 @@ const player = (state = initialState, action) => {
     return { ...state, name: action.nome };
   case 'ADICIONAR_SCORE':
     return { ...state, score: state.score + action.score };
+  case 'ADICIONAR_ACERTO':
+    return { ...state, assertions: state.assertions + 1 };
   default:
     return state;
   }
