@@ -63,10 +63,10 @@ class Play extends React.Component {
   };
 
   randomAnswer = () => {
-    const { random } = this.state;
+    const { random, indexQ } = this.state;
     const { questions: { results } } = this.props;
-    const incorrectAnswers = results[0].incorrect_answers;
-    const correctAnswer = results[0].correct_answer;
+    const incorrectAnswers = results[indexQ].incorrect_answers;
+    const correctAnswer = results[indexQ].correct_answer;
     const arrayOfAnswer = [...incorrectAnswers, correctAnswer];
     if (arrayOfAnswer.length === 2 && random % 2 === 0) {
       return [arrayOfAnswer[1], arrayOfAnswer[0]];
@@ -74,10 +74,10 @@ class Play extends React.Component {
   };
 
   handleColor = (answer) => {
-    const { answerColor } = this.state;
+    const { answerColor, indexQ } = this.state;
     const { questions } = this.props;
     if (answerColor) {
-      return answer === questions.results[0].correct_answer ? 'correct' : 'wrong';
+      return answer === questions.results[indexQ].correct_answer ? 'correct' : 'wrong';
     }
     return '';
   };
@@ -111,13 +111,14 @@ class Play extends React.Component {
   handleClickNext = () => {
     const { indexQ } = this.state;
     const { history } = this.props;
-    const four = 4;
-    if (indexQ === four) {
+    const five = 5;
+    if (indexQ === five) {
       history.push('/feedback');
     }
     this.setState((prev) => ({
       indexQ: prev.indexQ + 1,
       answerColor: false,
+      indexPergunta: prev.indexPergunta + 1,
       timer: 30,
     }));
   };
@@ -131,7 +132,7 @@ class Play extends React.Component {
         <Timer timer={ timer } />
         {
           questions.length !== 0
-            ? questions.results.filter((e, i) => i === indexQ)
+            ? questions.results.filter((_e, i) => i === indexQ)
               .map((question) => (
                 <div
                   key={ question.question }
