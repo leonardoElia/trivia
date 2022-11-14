@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../componentes/Header';
 import Timer from '../componentes/Timer';
-import { actionScore, saveQuestions } from '../redux/actions/indexAction';
+import { actionScore, saveAcertion, saveQuestions } from '../redux/actions/indexAction';
 import { getQuestions } from '../services';
 import './play.css';
 
@@ -98,12 +98,15 @@ class Play extends React.Component {
       if (difficulty === 'hard') {
         pontuacao = soma10 + (hard * timer);
         dispatch(actionScore(pontuacao));
+        dispatch(saveAcertion());
       } else if (difficulty === 'medium') {
         pontuacao = soma10 + (medium * timer);
         dispatch(actionScore(pontuacao));
+        dispatch(saveAcertion());
       } else {
         pontuacao = soma10 + (easy * timer);
         dispatch(actionScore(pontuacao));
+        dispatch(saveAcertion());
       }
     }
   };

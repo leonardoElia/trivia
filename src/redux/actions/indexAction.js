@@ -17,3 +17,7 @@ export const saveQuestions = (data) => ({
   type: 'SAVE_QUESTIONS',
   data,
 });
+
+export const saveAcertion = () => ({
+  type: 'ADICIONAR_ACERTO',
+});
