@@ -17,6 +17,16 @@ class Feedback extends React.Component {
         {assertions < acertos ? (
           <p data-testid="feedback-text">Could be better...</p>
         ) : (<p data-testid="feedback-text">Well Done!</p>)}
+        <button
+          data-testid="btn-play-again"
+          type="button"
+          onClick={ () => {
+            const { history } = this.props;
+            history.push('/');
+          } }
+        >
+          Play Again
+        </button>
       </>
     );
   }
@@ -29,6 +39,9 @@ const mapStateToProps = (store) => ({
 Feedback.propTypes = {
   assertions: PropTypes.number.isRequired,
   score: PropTypes.number.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
 };
 
 export default connect(mapStateToProps)(Feedback);
