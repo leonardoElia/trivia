@@ -6,6 +6,16 @@ import Header from '../componentes/Header';
 const acertos = 3;
 
 class Feedback extends React.Component {
+  sendToLogin = () => {
+    const { history } = this.props;
+    history.push('/');
+  };
+
+  sendToRanking = () => {
+    const { history } = this.props;
+    history.push('/ranking');
+  };
+
   render() {
     const { assertions, score } = this.props;
     return (
@@ -20,20 +30,14 @@ class Feedback extends React.Component {
         <button
           data-testid="btn-play-again"
           type="button"
-          onClick={ () => {
-            const { history } = this.props;
-            history.push('/');
-          } }
+          onClick={ this.sendToLogin }
         >
           Play Again
         </button>
         <button
           data-testid="btn-ranking"
           type="button"
-          onClick={ () => {
-            const { history } = this.props;
-            history.push('/ranking');
-          } }
+          onClick={ this.sendToRanking }
         >
           Ranking
         </button>
