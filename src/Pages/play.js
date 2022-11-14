@@ -111,8 +111,8 @@ class Play extends React.Component {
   handleClickNext = () => {
     const { indexQ } = this.state;
     const { history } = this.props;
-    const five = 5;
-    if (indexQ === five) {
+    const four = 4;
+    if (indexQ === four) {
       history.push('/feedback');
     }
     this.setState((prev) => ({
