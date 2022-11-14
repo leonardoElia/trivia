@@ -12,7 +12,7 @@ const player = (state = initialState, action) => {
   case 'MUDAR_NOME':
     return { ...state, name: action.nome };
   case 'ADICIONAR_SCORE':
-    return { ...state, score: action.score };
+    return { ...state, score: state.score + action.score };
   default:
     return state;
   }
