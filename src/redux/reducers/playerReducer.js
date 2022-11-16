@@ -15,6 +15,12 @@ const player = (state = initialState, action) => {
     return { ...state, score: state.score + action.score };
   case 'ADICIONAR_ACERTO':
     return { ...state, assertions: state.assertions + 1 };
+  case 'RESET_SCORE':
+    return {
+      ...state,
+      score: 0,
+      assertions: 0,
+    };
   default:
     return state;
   }

@@ -8,7 +8,12 @@ const acertos = 3;
 class Feedback extends React.Component {
   componentDidMount() {
     const { player } = this.props;
-    localStorage.setItem('ranking', JSON.stringify(player));
+    const rankingLocal = JSON.parse(localStorage.getItem('ranking'));
+    console.log(rankingLocal);
+    if (rankingLocal !== null) {
+      localStorage
+        .setItem('ranking', JSON.stringify([...rankingLocal, player]));
+    } else { localStorage.setItem('ranking', JSON.stringify([player])); }
   }
 
   sendToLogin = () => {

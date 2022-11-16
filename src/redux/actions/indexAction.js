@@ -21,3 +21,7 @@ export const saveQuestions = (data) => ({
 export const saveAcertion = () => ({
   type: 'ADICIONAR_ACERTO',
 });
+
+export const resetScore = () => ({
+  type: 'RESET_SCORE',
+});
