@@ -3,7 +3,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../componentes/Header';
 import Timer from '../componentes/Timer';
-import { actionScore, saveAcertion, saveQuestions } from '../redux/actions/indexAction';
+import { actionScore, resetScore,
+  saveAcertion,
+  saveQuestions } from '../redux/actions/indexAction';
 import { getQuestions } from '../services';
 import './play.css';
 
@@ -13,15 +15,17 @@ const soma10 = 10;
 const hard = 3;
 const medium = 2;
 const easy = 1;
+const middle = 0.5;
 
-class Play extends React.Component {
+class Game extends React.Component {
   state = {
     answerColor: false,
-    random: 0,
     timer: 30,
     buttonDisabled: false,
     indexPergunta: 0,
     indexQ: 0,
+    array: [],
+    enableNext: false,
   };
 
   async componentDidMount() {
@@ -31,13 +35,13 @@ class Play extends React.Component {
       localStorage.clear();
       const { history } = this.props;
       history.push('/');
+    } else {
+      const { dispatch } = this.props;
+      await dispatch(saveQuestions(questions));
+      this.randomAnswer();
+      this.timer();
+      dispatch(resetScore());
     }
-    const { dispatch } = this.props;
-    await dispatch(saveQuestions(questions));
-    this.setState({
-      random: Math.floor(Math.random() * 100),
-    });
-    this.timer();
   }
 
   componentDidUpdate(_prevProps, prevState) {
@@ -45,6 +49,7 @@ class Play extends React.Component {
       clearInterval(this.intervalID);
       this.setState({
         buttonDisabled: true,
+        enableNext: true,
       });
     }
   }
@@ -63,14 +68,18 @@ class Play extends React.Component {
   };
 
   randomAnswer = () => {
-    const { random, indexQ } = this.state;
+    const { indexQ } = this.state;
     const { questions: { results } } = this.props;
+    console.log(indexQ);
     const incorrectAnswers = results[indexQ].incorrect_answers;
     const correctAnswer = results[indexQ].correct_answer;
     const arrayOfAnswer = [...incorrectAnswers, correctAnswer];
-    if (arrayOfAnswer.length === 2 && random % 2 === 0) {
-      return [arrayOfAnswer[1], arrayOfAnswer[0]];
-    } return arrayOfAnswer;
+    const sortedArray = arrayOfAnswer.sort(() => Math.random() - middle);
+    // if (arrayOfAnswer.length === 2 && random % 2 === 0) {
+    //   return [arrayOfAnswer[1], arrayOfAnswer[0]];
+    // }
+    this.setState({
+      array: sortedArray });
   };
 
   handleColor = (answer) => {
@@ -90,10 +99,13 @@ class Play extends React.Component {
 
     const { indexPergunta } = this.state;
     const { value } = target;
+    this.setState({
+      buttonDisabled: true,
+    });
+    clearInterval(this.intervalID);
     if (results[indexPergunta].correct_answer === value) {
       const { timer } = this.state;
       const { difficulty } = results[indexPergunta];
-
       let pontuacao = 0;
       if (difficulty === 'hard') {
         pontuacao = soma10 + (hard * timer);
@@ -123,12 +135,15 @@ class Play extends React.Component {
       answerColor: false,
       indexPergunta: prev.indexPergunta + 1,
       timer: 30,
-    }));
+      buttonDisabled: false,
+    }), this.randomAnswer);
+    this.timer();
   };
 
   render() {
-    const { timer, buttonDisabled, answerColor, indexQ } = this.state;
+    const { timer, buttonDisabled, answerColor, indexQ, array, enableNext } = this.state;
     const { questions } = this.props;
+    const nextButton = enableNext || answerColor;
     return (
       <div>
         <Header />
@@ -144,7 +159,7 @@ class Play extends React.Component {
                   <br />
                   <p data-testid="question-text">{question.question}</p>
                   <div data-testid="answer-options">
-                    {this.randomAnswer().map((answer, index) => (
+                    {array.map((answer, index) => (
                       <button
                         className={ this.handleColor(answer) }
                         data-testid={ answer === question.correct_answer
@@ -163,7 +178,7 @@ class Play extends React.Component {
                 </div>
               )) : null
         }
-        { answerColor && (
+        { nextButton && (
           <button
             data-testid="btn-next"
             type="button"
@@ -177,12 +192,12 @@ class Play extends React.Component {
   }
 }
 
-Play.propTypes = {
+Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
   questions: PropTypes.objectOf().isRequired,
-  results: PropTypes.arrayOf().isRequired,
+  results: PropTypes.arrayOf(Object).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
@@ -190,4 +205,4 @@ const mapStateToProps = (store) => ({
   questions: store.game.questions,
   results: store.game.questions.results,
 });
-export default connect(mapStateToProps)(Play);
+export default connect(mapStateToProps)(Game);

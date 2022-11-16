@@ -9,13 +9,13 @@ class Ranking extends React.Component {
   };
 
   render() {
-    const rankingLocal = [JSON.parse(localStorage.getItem('ranking'))];
-    // const rankingSort = rankingLocal.sort((a, b) => (b.rankingScore) - (a.rankingScore));
+    const rankingLocal = JSON.parse(localStorage.getItem('ranking'));
+    const sortedRankingLocal = rankingLocal.sort((a, b) => b.score - a.score);
     return (
       <div>
         <h1 data-testid="ranking-title">Ranking</h1>
-        { rankingLocal !== null ? (
-          rankingLocal.map((player, index) => (
+        { rankingLocal !== undefined ? (
+          sortedRankingLocal.map((player, index) => (
             <div key={ index }>
               <img src={ `https://www.gravatar.com/avatar/${player.gravatarEmail}` } alt="imagemGravatar" />
               <p data-testid={ `player-name-${index}` }>{player.name}</p>
