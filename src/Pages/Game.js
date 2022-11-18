@@ -31,17 +31,17 @@ class Game extends React.Component {
   async componentDidMount() {
     const token = localStorage.getItem('token');
     const questions = await getQuestions(token);
+    console.log(questions);
     if (questions.response_code === THREE) {
       localStorage.clear();
       const { history } = this.props;
       history.push('/');
-    } else {
-      const { dispatch } = this.props;
-      await dispatch(saveQuestions(questions));
-      this.randomAnswer();
-      this.timer();
-      dispatch(resetScore());
     }
+    const { dispatch } = this.props;
+    await dispatch(saveQuestions(questions));
+    this.randomAnswer();
+    this.timer();
+    dispatch(resetScore());
   }
 
   componentDidUpdate(_prevProps, prevState) {
@@ -70,16 +70,15 @@ class Game extends React.Component {
   randomAnswer = () => {
     const { indexQ } = this.state;
     const { questions: { results } } = this.props;
-    console.log(indexQ);
-    const incorrectAnswers = results[indexQ].incorrect_answers;
-    const correctAnswer = results[indexQ].correct_answer;
-    const arrayOfAnswer = [...incorrectAnswers, correctAnswer];
-    const sortedArray = arrayOfAnswer.sort(() => Math.random() - middle);
-    // if (arrayOfAnswer.length === 2 && random % 2 === 0) {
-    //   return [arrayOfAnswer[1], arrayOfAnswer[0]];
-    // }
-    this.setState({
-      array: sortedArray });
+    if (results !== undefined && results.length > 0) {
+      console.log(results);
+      const incorrectAnswers = results[indexQ].incorrect_answers;
+      const correctAnswer = results[indexQ].correct_answer;
+      const arrayOfAnswer = [...incorrectAnswers, correctAnswer];
+      const sortedArray = arrayOfAnswer.sort(() => Math.random() - middle);
+      this.setState({
+        array: sortedArray });
+    }
   };
 
   handleColor = (answer) => {
