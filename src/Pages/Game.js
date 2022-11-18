@@ -36,13 +36,12 @@ class Game extends React.Component {
       localStorage.clear();
       const { history } = this.props;
       history.push('/');
-    } else {
-      const { dispatch } = this.props;
-      await dispatch(saveQuestions(questions));
-      this.randomAnswer();
-      this.timer();
-      dispatch(resetScore());
     }
+    const { dispatch } = this.props;
+    await dispatch(saveQuestions(questions));
+    this.randomAnswer();
+    this.timer();
+    dispatch(resetScore());
   }
 
   componentDidUpdate(_prevProps, prevState) {
@@ -71,7 +70,6 @@ class Game extends React.Component {
   randomAnswer = () => {
     const { indexQ } = this.state;
     const { questions: { results } } = this.props;
-    console.log(results);
     if (results !== undefined && results.length > 0) {
       console.log(results);
       const incorrectAnswers = results[indexQ].incorrect_answers;
