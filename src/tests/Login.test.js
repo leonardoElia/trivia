@@ -16,7 +16,7 @@ describe('Analisando a página de Login', () => {
 
   test('Verificar se existe um input de nome', () => {
     renderWithRouterAndRedux(<App />);
-    const inputName = screen.getByText(/nome/i);
+    const inputName = screen.getByText(/name/i);
     userEvent.type(inputName, 'Pedro');
     expect(inputName).toBeInTheDocument();
   });
@@ -68,7 +68,7 @@ describe('Analisando a página de Login', () => {
       const inputEmail = screen.getByText(/email/i);
       userEvent.type(inputEmail, email);
 
-      const buttonConf = screen.getByRole('button', { name: /Configurações/i });
+      const buttonConf = screen.getByRole('button', { name: /Config/i });
 
       expect(buttonConf).toBeInTheDocument();
       userEvent.click(buttonConf);
