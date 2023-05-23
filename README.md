@@ -15,9 +15,9 @@
 []()
 
 ## colaboradores
-[Leonardo Elias](https://github.com/leonardoElia)
-[Nathália Andrade](https://github.com/NMAResende)
-[Ivan Dadalto](https://github.com/ivandadalto)
+[Leonardo Elias](https://github.com/leonardoElia) <br>
+[Nathália Andrade](https://github.com/NMAResende) <br> 
+[Ivan Dadalto](https://github.com/ivandadalto) <br>
 
 ## como rodar o projeto localmente
 1. faça o clone desde repositorio 
