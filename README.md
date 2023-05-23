@@ -12,7 +12,7 @@
 * css
 
 ## acesse o link para visualizar a aplicação
-[]()
+[Projeto Trivia](https://trivia-theta-five.vercel.app/)
 
 ## colaboradores
 [Leonardo Elias](https://github.com/leonardoElia) <br>
